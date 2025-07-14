@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }} – UNIVERSIDAD MINATITLAN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+  <style>
+    :root {
+      --university-blue: #003366;
+      --university-gold: #CC9900;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .university-header {
+      background-color: var(--university-blue);
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar {
+      background-color: var(--university-blue) !important;
+      border-bottom: 3px solid var(--university-gold);
+    }
+    
+    .navbar-brand, .nav-link, .dropdown-item {
+      color: white !important;
+      font-weight: 500;
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 1.5rem;
+    }
+    
+    .nav-link {
+      padding: 0.5rem 1.2rem !important;
+      font-size: 1.1rem;
+    }
+    
+    .nav-link:hover, .dropdown-item:hover {
+      color: var(--university-gold) !important;
+    }
+    
+    .dropdown-menu {
+      background-color: var(--university-blue);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0;
+    }
+    
+    .dropdown-submenu {
+      position: relative;
+    }
+    
+    .dropdown-submenu > .dropdown-menu {
+      top: 0;
+      left: 100%;
+      margin-top: -1px;
+    }
+    
+    .ingenierias-menu {
+      min-width: 350px;
+    }
+    
+    .ingenierias-menu .dropdown-item {
+      padding: 0.7rem 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 1rem;
+    }
+    
+    .page-content {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .ingenieria-item {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      font-size: 1.1rem;
+    }
+    
+    .ingenieria-title {
+      color: var(--university-blue);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--university-gold);
+    }
+    
+    .contact-card {
+      background-color: #f0f8ff;
+      border-left: 4px solid var(--university-gold);
+    }
+    
+    @media (max-width: 992px) {
+      .dropdown-submenu > .dropdown-menu {
+        left: 0;
+        width: 100%;
+      }
+    }
+    
+    footer {
+      background-color: var(--university-blue);
+      color: white;
+      padding: 2rem 0;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado de la universidad -->
+  <header class="university-header">
+    <div class="container">
+      <h1>UNIVERSIDAD MINATITLAN</h1>
+      <p class="lead">Excelencia académica y formación profesional</p>
+    </div>
+  </header>
+
+  <!-- Menú de navegación recursivo -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">MENÚ PRINCIPAL</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          {% macro render_menu(menu_dict, nivel=0) %}
+            {% for label, item in menu_dict.items() %}
+              {% if item is string %}
+                <li class="nav-item">
+                  <a class="{{ 'nav-link' if nivel==0 else 'dropdown-item' }}" href="{{ item }}">{{ label }}</a>
+                </li>
+              {% else %}
+                <li class="nav-item dropdown {% if nivel > 0 %}dropdown-submenu{% endif %}">
+                  <a class="{{ 'nav-link' if nivel==0 else 'dropdown-item dropdown-toggle' }}"
+                     href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                    {{ label }}
+                  </a>
+                  <ul class="dropdown-menu {% if label == 'Ingenierías' %}ingenierias-menu{% endif %}">
+                    {{ render_menu(item, nivel+1) }}
+                  </ul>
+                </li>
+              {% endif %}
+            {% endfor %}
+          {% endmacro %}
+          {{ render_menu(menu) }}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="container">
+    <div class="page-content">
+      <h1 class="text-center mb-4">{{ title }}</h1>
+      
+      {% if title == "Inicio" %}
+        <div class="text-center mb-5">
+          <p class="lead">Bienvenido. Explora nuestra oferta educativa con el menú superior.</p>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-8 mx-auto">
+            <div class="card contact-card p-4 mb-4">
+              <h3 class="text-center mb-3"><i class="bi bi-info-circle me-2"></i>Información de Contacto</h3>
+              <div class="d-flex justify-content-center mb-2">
+                <i class="bi bi-person me-2"></i>
+                <span>Jairo Hernández Torres</span>
+              </div>
+              <div class="d-flex justify-content-center mb-2">
+                <i class="bi bi-envelope me-2"></i>
+                <a href="mailto:jairo1920@outlook.com">jairo1920@outlook.com</a>
+              </div>
+              <div class="d-flex justify-content-center">
+                <i class="bi bi-telephone me-2"></i>
+                <a href="tel:9221246641">922 124 6641</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <hr class="my-5">
+        
+        <h3 class="ingenieria-title text-center">Nuestras Ingenierías</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="ingenieria-item">Ingeniería Ambiental</div>
+            <div class="ingenieria-item">Ingeniería Electromecánica</div>
+            <div class="ingenieria-item">Ingeniería Electrónica</div>
+            <div class="ingenieria-item">Ingeniería Industrial</div>
+          </div>
+          <div class="col-md-6">
+            <div class="ingenieria-item">Ingeniería Química</div>
+            <div class="ingenieria-item">Ingeniería en Gestión Empresarial</div>
+            <div class="ingenieria-item">Ingeniería en Sistemas Computacionales</div>
+          </div>
+        </div>
+        
+      {% elif title == "Contacto" %}
+        <div class="row">
+          <div class="col-md-8 mx-auto">
+            <div class="card contact-card p-4">
+              <h3 class="text-center mb-4"><i class="bi bi-person me-2"></i>Información de Contacto</h3>
+              
+              <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-person-circle fs-2 me-3"></i>
+                <div>
+                  <h5>Nombre</h5>
+                  <p class="fs-5">Jairo Hernández Torres</p>
+                </div>
+              </div>
+              
+              <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-envelope fs-2 me-3"></i>
+                <div>
+                  <h5>Correo Electrónico</h5>
+                  <p class="fs-5">
+                    <a href="mailto:jairo1920@outlook.com">jairo1920@outlook.com</a>
+                  </p>
+                </div>
+              </div>
+              
+              <div class="d-flex align-items-center mb-4">
+                <i class="bi bi-telephone fs-2 me-3"></i>
+                <div>
+                  <h5>Teléfono</h5>
+                  <p class="fs-5">
+                    <a href="tel:9221246641">922 124 6641</a>
+                  </p>
+                </div>
+              </div>
+              
+              <div class="mt-4">
+                <h4 class="mb-3"><i class="bi bi-geo-alt me-2"></i>Ubicación</h4>
+                <div class="ratio ratio-16x9">
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15215.924854345116!2d-94.55826928437498!3d17.599654999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85ebf9d0f8f7c6b1%3A0x5b3e7a0d0b3e7a0d!2sMinatitl%C3%A1n%2C%20Veracruz!5e0!3m2!1ses!2smx!4v1690499999999!5m2!1ses!2smx" 
+                          style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      {% else %}
+        <div class="text-center mb-5">
+          <p>Estás en: <strong>{{ title }}</strong></p>
+          <p class="lead mt-3">Programa académico de excelencia con enfoque práctico</p>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-8 mx-auto">
+            <div class="card p-4">
+              <h3 class="text-center mb-4">Plan de Estudios</h3>
+              <p>Nuestro programa de {{ title }} incluye asignaturas fundamentales y especializadas para formar profesionales de alto nivel.</p>
+              
+              <h5 class="mt-4">Áreas de especialización:</h5>
+              <ul>
+                <li>Desarrollo de sistemas avanzados</li>
+                <li>Gestión de proyectos tecnológicos</li>
+                <li>Innovación y desarrollo sustentable</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <hr class="my-5">
+        
+        <div class="card contact-card p-4 mt-4">
+          <h4 class="text-center mb-3"><i class="bi bi-info-circle me-2"></i>Información de Contacto</h4>
+          <div class="d-flex justify-content-center flex-wrap">
+            <div class="mx-3 mb-2">
+              <i class="bi bi-person me-2"></i>
+              <span>Jairo Hernández Torres</span>
+            </div>
+            <div class="mx-3 mb-2">
+              <i class="bi bi-envelope me-2"></i>
+              <a href="mailto:jairo1920@outlook.com">jairo1920@outlook.com</a>
+            </div>
+            <div class="mx-3 mb-2">
+              <i class="bi bi-telephone me-2"></i>
+              <a href="tel:9221246641">922 124 6641</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Pie de página -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <h5>UNIVERSIDAD MINATITLAN</h5>
+          <p>Formando profesionales desde 1985</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <h5>Contacto</h5>
+          <p>Jairo Hernández Torres</p>
+          <p><a href="mailto:jairo1920@outlook.com" class="text-white">jairo1920@outlook.com</a></p>
+          <p><a href="tel:9221246641" class="text-white">922 124 6641</a></p>
+        </div>
+      </div>
+      <hr class="my-4 bg-light">
+      <div class="text-center">
+        <p>&copy; 2023 Universidad Minatitlán. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
